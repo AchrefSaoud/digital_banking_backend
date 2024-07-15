@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class CurrentAcount extends BankAccount{
+public class CurrentAccount extends BankAccount{
     private Double overDraft;
 }

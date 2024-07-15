@@ -1,5 +1,5 @@
 package com.example.demo.model;
 
-public enum AcountStatus {
+public enum AccountStatus {
  CREATED,ACTIVATED,SUSPENDED
 }
