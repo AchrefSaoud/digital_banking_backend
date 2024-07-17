@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.*;
@@ -12,6 +13,8 @@ import com.example.demo.exceptions.*;
 import com.example.demo.mapper.BankAccountMapperImpl;
 import com.example.demo.model.*;
 import com.example.demo.repositries.*;
+
+import org.springframework.data.domain.Page;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -148,5 +151,38 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Override
     public void deleteCustomer(String customerId){
         customerRepository.deleteById(customerId);
+    }
+
+    @Override
+    public List<OperationDto> accountHistory(String accountId){
+        List<Operation> accountOperations = accountOperationRepository.findByBankAccountId(accountId);
+        return accountOperations.stream().map(op->dtoMapper.fromAccountOperation(op)).collect(Collectors.toList());
+    }
+
+    @Override
+    public AccountHistoryDto getAccountHistory(String accountId, int page, int size) throws BankAccountNotFoundException {
+        BankAccount bankAccount = bankAccountRepository.findById(accountId).orElseThrow(() -> new BankAccountNotFoundException("Account not Found"));
+        
+        Page<Operation> accountOperations = accountOperationRepository.findByBankAccountIdOrderByDateDesc(accountId, PageRequest.of(page, size));
+        List<OperationDto> accountOperationDTOS = accountOperations.getContent().stream()
+            .map(dtoMapper::fromAccountOperation)
+            .collect(Collectors.toList());
+        
+        return new AccountHistoryDto(
+            bankAccount.getId(),
+            bankAccount.getBalance(),
+            page,
+            accountOperations.getTotalPages(),
+            size,
+            accountOperationDTOS
+        );
+    }
+    
+
+    @Override
+    public List<CustomerDto> searchCustomers(String keyword) {
+        List<Customer> customers=customerRepository.searchCustomer(keyword);
+        List<CustomerDto> customerDTOS = customers.stream().map(cust -> dtoMapper.fromCustomer(cust)).collect(Collectors.toList());
+        return customerDTOS;
     }
 }

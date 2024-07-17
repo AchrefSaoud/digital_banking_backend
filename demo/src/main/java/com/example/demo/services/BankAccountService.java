@@ -2,9 +2,11 @@ package com.example.demo.services;
 
 import java.util.List;
 
+import com.example.demo.dto.AccountHistoryDto;
 import com.example.demo.dto.BankAccountDto;
 import com.example.demo.dto.CurrentBankAccountDto;
 import com.example.demo.dto.CustomerDto;
+import com.example.demo.dto.OperationDto;
 import com.example.demo.dto.SavingBankAccountDto;
 import com.example.demo.exceptions.BalanceNotSufficientException;
 import com.example.demo.exceptions.BankAccountNotFoundException;
@@ -34,4 +36,10 @@ public interface BankAccountService {
     CustomerDto updateCustomer(CustomerDto customerDTO);
 
     void deleteCustomer(String customerId);
+
+    List<OperationDto> accountHistory(String accountId);
+
+    AccountHistoryDto getAccountHistory(String accountId, int page, int size) throws BankAccountNotFoundException;
+
+    List<CustomerDto> searchCustomers(String keyword);
 }

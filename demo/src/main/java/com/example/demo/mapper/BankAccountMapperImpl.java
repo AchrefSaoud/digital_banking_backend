@@ -1,5 +1,7 @@
 package com.example.demo.mapper;
 
+import java.util.Date;
+
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.*;
@@ -82,4 +84,16 @@ public class BankAccountMapperImpl {
         currentAccount.setOverDraft(currentBankAccountDto.overDraft());
         return currentAccount;
     }
+
+    public OperationDto fromAccountOperation(Operation accountOperation) {
+        Long id = accountOperation.getId();
+        Date operationDate = accountOperation.getDate();
+        double amount = accountOperation.getAmount();
+        OperationType type = accountOperation.getType();
+        String description = accountOperation.getDescription();
+    
+        return new OperationDto(id, operationDate, amount, type, description);
+    }
+    
+
 }
