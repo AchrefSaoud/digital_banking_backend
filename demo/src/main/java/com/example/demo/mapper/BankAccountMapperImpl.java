@@ -38,6 +38,7 @@ public class BankAccountMapperImpl {
     public BankAccountDto fromSavingBankAccounttoBankAccountDto(SavingAccount savingAccount) {
         if (savingAccount == null) return null;
         return new BankAccountDto(
+            "Saving account",
             savingAccount.getId()
         );
     }
@@ -69,6 +70,7 @@ public class BankAccountMapperImpl {
     public BankAccountDto fromCurrentBankAccounttoBankAccountDto(CurrentAccount currentAccount) {
         if (currentAccount == null) return null;
         return new BankAccountDto(
+            "Current Account",
             currentAccount.getId()
         );
     }
