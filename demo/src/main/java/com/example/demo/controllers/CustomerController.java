@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,12 +32,14 @@ public class CustomerController {
 
     @Operation(summary = "Get all customers", description = "Retrieve a list of all customers")
     @GetMapping("/customers")
+    @PreAuthorize("hasAuthority('SCOPE_USER')")
     public List<CustomerDto> customers(){
         return bankAccountService.listCustomers();
     }
 
     @Operation(summary = "Search customers", description = "Search for customers based on a keyword")
     @GetMapping("/customers/search")
+    @PreAuthorize("hasAuthority('SCOPE_USER')")
     public List<CustomerDto> searchCustomers(
             @Parameter(description = "The keyword to search for in customer names", example = "John") 
             @RequestParam(name = "keyword", defaultValue = "") String keyword){
@@ -45,6 +48,7 @@ public class CustomerController {
 
     @Operation(summary = "Get customer by ID", description = "Retrieve a customer by their ID")
     @GetMapping("/customers/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_USER')")
     public CustomerDto getCustomer(
             @Parameter(description = "The ID of the customer to retrieve", example = "123") 
             @PathVariable(name = "id") String customerId) throws CustomerNotFoundException {
@@ -53,6 +57,7 @@ public class CustomerController {
 
     @Operation(summary = "Save customer", description = "Save a new customer")
     @PostMapping("/customers")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public CustomerDto saveCustomer(
             @Parameter(description = "The customer data to be saved") 
             @RequestBody CustomerDto customerDTO){
@@ -61,6 +66,7 @@ public class CustomerController {
 
     @Operation(summary = "Update customer", description = "Update an existing customer")
     @PutMapping("/customers/{customerId}")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public CustomerDto updateCustomer(
             @Parameter(description = "The ID of the customer to update", example = "123") 
             @PathVariable String customerId, 
@@ -72,6 +78,7 @@ public class CustomerController {
 
     @Operation(summary = "Delete customer", description = "Delete a customer by their ID")
     @DeleteMapping("/customers/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public void deleteCustomer(
             @Parameter(description = "The ID of the customer to delete", example = "123") 
             @PathVariable String id){

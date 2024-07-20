@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,7 @@ public class BankAccountController {
 
     @Operation(summary = "Get bank account by ID", description = "Retrieve a bank account by its ID")
     @GetMapping("/accounts/{accountId}")
+    @PreAuthorize("hasAuthority('SCOPE_USER')")
     public BankAccountDto getBankAccount(
             @Parameter(description = "The ID of the bank account", example = "123456") 
             @PathVariable String accountId) throws BankAccountNotFoundException {
@@ -43,12 +45,14 @@ public class BankAccountController {
 
     @Operation(summary = "List all bank accounts", description = "Retrieve a list of all bank accounts")
     @GetMapping("/accounts")
+    @PreAuthorize("hasAuthority('SCOPE_USER')")
     public List<BankAccountDto> listAccounts(){
         return bankAccountService.bankAccountList();
     }
 
     @Operation(summary = "Get account operations history", description = "Retrieve operations history for a specific bank account")
     @GetMapping("/accounts/{accountId}/operations")
+    @PreAuthorize("hasAuthority('SCOPE_USER')")
     public List<OperationDto> getHistory(
             @Parameter(description = "The ID of the bank account", example = "123456") 
             @PathVariable String accountId){
@@ -57,6 +61,7 @@ public class BankAccountController {
 
     @Operation(summary = "Get paginated account history", description = "Retrieve paginated operations history for a specific bank account")
     @GetMapping("/accounts/{accountId}/pageOperations")
+    @PreAuthorize("hasAuthority('SCOPE_USER')")
     public AccountHistoryDto getAccountHistory(
             @Parameter(description = "The ID of the bank account", example = "123456") 
             @PathVariable String accountId,
@@ -69,6 +74,7 @@ public class BankAccountController {
 
     @Operation(summary = "Debit from bank account", description = "Debit a specified amount from a bank account")
     @PostMapping("/accounts/debit")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public DebitDto debit(
             @Parameter(description = "The debit request data") 
             @RequestBody DebitDto debitDTO) throws BankAccountNotFoundException, BalanceNotSufficientException {
@@ -78,6 +84,7 @@ public class BankAccountController {
 
     @Operation(summary = "Credit to bank account", description = "Credit a specified amount to a bank account")
     @PostMapping("/accounts/credit")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public CreditDto credit(
             @Parameter(description = "The credit request data") 
             @RequestBody CreditDto creditDTO) throws BankAccountNotFoundException {
@@ -87,6 +94,7 @@ public class BankAccountController {
 
     @Operation(summary = "Transfer between accounts", description = "Transfer a specified amount from one account to another")
     @PostMapping("/accounts/transfer")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public void transfer(
             @Parameter(description = "The transfer request data") 
             @RequestBody TransferRequestDto transferRequestDTO) throws BankAccountNotFoundException, BalanceNotSufficientException {
