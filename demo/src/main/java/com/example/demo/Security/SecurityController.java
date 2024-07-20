@@ -15,12 +15,14 @@ import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/auth")
+@CrossOrigin("*")
 public class SecurityController {
 
     private final AuthenticationManager authenticationManager;
